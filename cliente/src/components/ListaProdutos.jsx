@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable react/prop-types */ 
 import styles from '../styles/listaProdutos.module.css'
 
 export default function ListaProdutos({ produtos }) {
@@ -16,4 +16,4 @@ export default function ListaProdutos({ produtos }) {
       </ul>
     </>
   );
-}
+} 
