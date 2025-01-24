@@ -37,6 +37,7 @@ export default function Alterar() {
             alert('Erro ao alterar');
         }
     }
+
     return (
         <div>
             <form onSubmit={alterar}>
