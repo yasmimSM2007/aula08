@@ -1,75 +1,98 @@
 import { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
-import DeleteForever from '@mui/icons-material/DeleteForever'
+import DeleteForever from "@mui/icons-material/DeleteForever";
 
 export default function Home() {
-
-  const [usuarios, setUsuarios] = useState([]);
+  const [esmaltes, setEsmaltes] = useState([]);
 
   useEffect(() => {
-    const buscarUsuario = async () => {
+    const buscarEsmalte = async () => {
       try {
-        const resposta = await fetch("http://localhost:3000/usuarios");
+        const resposta = await fetch("http://localhost:3000/esmaltes");
         const dados = await resposta.json();
-        setUsuarios(dados);
+        setEsmaltes(dados);
       } catch {
-        alert('Ocorreu um erro no app!');
+        alert("Ocorreu um erro no app!");
       }
-    }
-    buscarUsuario();
-  }, [usuarios]);
+    };
+    buscarEsmalte();
+  }, [esmaltes]);
 
-  const removerPessoa = async (id) => {
-    try{
-      await fetch('http://localhost:3000/usuarios/'+id, {
-        method: 'DELETE'
+  const removerEsmalte = async (id) => {
+    try {
+      await fetch("http://localhost:3000/esmaltes/" + id, {
+        method: "DELETE",
       });
-   
-    }catch{
-      alert('Ocorreu um erro na aplicação')
+    } catch {
+      alert("Ocorreu um erro na aplicação");
     }
   };
 
-  const exportarPDF = () =>{
+  const exportarPDF = () => {
     const doc = new jsPDF();
-    const tabela = usuarios.map ( usuario =>[
-      usuario.id,
-      usuario.nome,
-      usuario.email
+    const tabela = esmaltes.map((esmaltes) => [
+      esmaltes.id,
+      esmaltes.nome,
+      esmaltes.brand,
+      esmaltes.color,
+      esmaltes.type,
+      esmaltes.price,
+      esmaltes.collection,
+      esmaltes.volume,
     ]);
-    doc.text("Lista de usuarios",10,10);
-    doc.autoTable ({
-      head: [["ID", "Nome", "Email"]],
-      body: tabela
-  });
-     doc.save("alunos.pdf");
-  }
+    doc.text("Lista de esmaltes", 10, 10);
+    doc.autoTable({
+      head: [
+        ["ID", "Nome", "Brand", "Color", "Type", "Price", "Collection", "Volume"],
+      ],
+      body: tabela,
+    });
+    doc.save("esmaltes.pdf");
+  };
 
   return (
     <div>
-    <table>
-    <Button variant = "contained" onClick={()=> exportarPDF()}>Gerar PDF</Button>
-      <tr>
-        <td>Nome</td>
-        <td>E-mail</td>
-      </tr>
-      {usuarios.map((usuario) =>
-        <tr key={usuario.id}>
-          <td>{usuario.nome}</td>
-          <td>{usuario.email}</td>
-          <td><button onClick={() => removerPessoa(usuario.id)}>
-            <DeleteForever/>
-          </button>
-          <Link to={'/alterar/' + usuario.id}>
-          <button>Alterar</button>
-          </Link>
-          </td>
-        </tr>
-      )}
-    </table>
+      <Button variant="contained" onClick={() => exportarPDF()}>
+        Gerar PDF
+      </Button>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Brand</th>
+            <th>Color</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Collection</th>
+            <th>Volume</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {esmaltes.map((esmalte) => (
+            <tr key={esmalte.id}>
+              <td>{esmalte.nome}</td>
+              <td>{esmalte.brand}</td>
+              <td>{esmalte.color}</td>
+              <td>{esmalte.type}</td>
+              <td>{esmalte.price}</td>
+              <td>{esmalte.collection}</td>
+              <td>{esmalte.volume}</td>
+              <td>
+                <button onClick={() => removerEsmalte(esmalte.id)}>
+                  <DeleteForever />
+                </button>
+                <Link to={"/alterar/" + esmalte.id}>
+                  <button>Alterar</button>
+                </Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

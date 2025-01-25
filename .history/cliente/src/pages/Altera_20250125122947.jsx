@@ -30,28 +30,29 @@ export default function Alterar() {
         busca();
     } ,[]);
 
-    const alterar = async (event) => {
+    const alterar = async(event) => {
         event.preventDefault();
-        try {
-            await fetch('http://localhost:3000/esmaltes/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'Application/json' },
-                body: JSON.stringify({
-                    name: nome,
-                    brand: brand,
-                    color: color,
-                    type: type,
-                    price: price,
-                    collection: collection,
-                    volume: volume,
-                }),
-            });
+        try{
+            await fetch('http://localhost:3000/esmaltes/'+ id, 
+                {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'Application/json'},
+                    body: JSON.stringify({
+                        esmaltes:nome,
+                        esmaltes:brand,
+                        esmaltes:color,
+                        esmaltes:type,
+                        esmaltes:price,
+                        esmaltes:collection,
+                        esmaltes:volume
+                    })
+                }
+            );
             navigation('/');
-        } catch {
+        }catch{
             alert('Erro ao alterar');
         }
-    };
-    
+    }
     return (
         <div>
             <form onSubmit={alterar}>
